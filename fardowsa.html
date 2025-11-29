@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Safia Perfumes</title>
+  <style>
+    *{
+      margin:0; padding:0; box-sizing:border-box;
+      font-family:Arial, sans-serif;
+    }
+    body{ background:#f3f3f3; }
+
+    header{
+      background:#0ea5a3;
+      color:white;
+      padding:20px;
+      text-align:center;
+    }
+
+    .container{
+      max-width:1200px;
+      margin:20px auto;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:20px;
+      padding:10px;
+    }
+
+    .card{
+      background:white;
+      padding:15px;
+      text-align:center;
+      border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .card img{
+      width:150px;
+      height:150px;
+      object-fit:cover;
+      border-radius:10px;
+      margin-bottom:10px;
+    }
+
+    button{
+      background:#0ea5a3;
+      color:white;
+      border:none;
+      padding:10px 20px;
+      border-radius:5px;
+      cursor:pointer;
+    }
+
+    button:hover{ background:#0c8f8d; }
+
+    #cart-box{
+      width:300px;
+      background:white;
+      position:fixed;
+      right:10px;
+      top:10px;
+      padding:15px;
+      border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.2);
+      display:none;
+    }
+
+    #cart-box h2{
+      margin-bottom:10px;
+      text-align:center;
+    }
+
+    .cart-item{
+      display:flex;
+      justify-content:space-between;
+      margin-bottom:8px;
+      border-bottom:1px solid #ddd;
+      padding-bottom:5px;
+    }
+
+    .close-cart{
+      background:red;
+      padding:5px 10px;
+      border-radius:5px;
+      float:right;
+      margin-bottom:10px;
+      color:white;
+    }
+
+    #cart-btn{
+      position:fixed;
+      right:20px;
+      bottom:20px;
+      background:#0ea5a3;
+      color:white;
+      padding:15px 20px;
+      border-radius:50px;
+      cursor:pointer;
+      font-size:18px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Safia Perfumes</h1>
+  <p>Discover Your Best Fragrance</p>
+</header>
+
+<div class="container" id="perfume-list"></div>
+
+<div id="cart-btn" onclick="toggleCart()">🛒 Cart</div>
+
+<div id="cart-box">
+  <button class="close-cart" onclick="toggleCart()">Close</button>
+  <h2>Your Cart</h2>
+  <div id="cart-items"></div>
+  <hr>
+  <h3>Total: $<span id="total-price">0</span></h3>
+</div>
+
+<script>
+  const perfumes = [
+    { name:"Rose Elegance", price:1000, img:"images/rose.jpg" },
+    { name:"Ocean Breeze", price:900, img:"images/ocean.jpg" },
+    { name:" Oud", price:1300, img:"images/mystic.jpg" },
+    { name:"Vanilla Dream", price:500, img:"images/vanila.jpg" },
+    { name:"Citrus Fresh", price:400, img:"images/citrus.jpg" }
+  ];
+
+  let cart = [];
+  const list = document.getElementById("perfume-list");
+
+  perfumes.forEach((p, index)=>{
+    list.innerHTML += `
+      <div class="card">
+        <img src="${p.img}">
+        <h3>${p.name}</h3>
+        <p>$${p.price}</p>
+        <button onclick="addToCart(${index})">Add to Cart</button>
+      </div>
+    `;
+  });
+
+  function addToCart(i){
+    cart.push(perfumes[i]);
+    updateCart();
+  }
+
+  function updateCart(){
+    const cartContainer = document.getElementById("cart-items");
+    cartContainer.innerHTML = "";
+    let total = 0;
+
+    cart.forEach((item, i)=>{
+      total += item.price;
+
+      cartContainer.innerHTML += `
+        <div class="cart-item">
+          <span>${item.name}</span>
+          <span>$${item.price}</span>
+          <button onclick="removeItem(${i})">X</button>
+        </div>
+      `;
+    });
+
+    document.getElementById("total-price").innerText = total;
+  }
+
+  function removeItem(i){
+    cart.splice(i, 1);
+    updateCart();
+  }
+
+  function toggleCart(){
+    const box = document.getElementById("cart-box");
+    box.style.display = box.style.display === "block" ? "none" : "block";
+  }
+</script>
+
+</body>
+</html>
